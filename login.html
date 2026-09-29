@@ -19,16 +19,18 @@
     align-items: center;
   }
 
+  /* overlay */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
-    background: rgba(12, 15, 20, 0.85);
+    background: rgba(12, 15, 20, 0.75);
+    z-index: 0;
   }
 
   .container {
     position: relative;
-    z-index: 1;
+    z-index: 10;
     background: rgba(0,0,0,0.4);
     padding: 40px 30px;
     border: 1px solid rgba(255,255,255,0.2);
@@ -55,9 +57,24 @@
     padding: 12px;
     border-radius: 8px;
     border: 1px solid #444;
-    background: #0b0f18;
-    color: white;
+    background: #0b0f18 !important;
+    color: white !important;
     margin-bottom: 15px;
+    outline: none;
+  }
+
+  /* 🔥 Fix autofill */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #0b0f18 inset !important;
+    -webkit-text-fill-color: white !important;
+    transition: background-color 9999s ease-in-out 0s;
+  }
+
+  input:focus {
+    border-color: #c8a85d;
+    box-shadow: 0 0 10px rgba(200,168,93,0.4);
   }
 
   .btn {
@@ -68,10 +85,12 @@
     border-radius: 10px;
     cursor: pointer;
     font-size: 16px;
+    transition: 0.2s ease;
   }
 
   .btn:hover {
     filter: brightness(1.1);
+    transform: translateY(-1px);
   }
 
   .forgot {
@@ -91,6 +110,7 @@
   .status {
     margin-top: 15px;
     font-size: 14px;
+    min-height: 20px;
   }
 </style>
 </head>
@@ -102,12 +122,11 @@
   <div class="dynamic-message" id="message"></div>
 
   <form id="loginForm">
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
+    <input type="email" id="email" placeholder="Email" required autocomplete="email">
+    <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
     <button type="submit" class="btn">Login</button>
   </form>
 
-  <!-- 🔑 PASSWORD RESET LINK -->
   <div class="forgot">
     <a href="passwordreset.html">Forgot your password?</a>
   </div>
@@ -116,7 +135,7 @@
 </div>
 
 <script>
-// 🎭 RANDOM MESSAGES
+/* 🎭 RANDOM MESSAGES */
 const messages = [
   "We found the hat… but where’s the ball?",
   "Looks like we’re lost in a storm… let’s find the way back.",
@@ -127,8 +146,21 @@ const messages = [
   "Something’s drifted off… time to pull it back."
 ];
 
-const messageEl = document.getElementById("message");
-messageEl.textContent = messages[Math.floor(Math.random() * messages.length)];
+document.getElementById("message").textContent =
+  messages[Math.floor(Math.random() * messages.length)];
+
+/* 🔐 FORM HANDLING */
+document.getElementById("loginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const status = document.getElementById("status");
+  status.innerText = "Signing in...";
+
+  // 🚀 Placeholder for Firebase login
+  setTimeout(() => {
+    status.innerText = "Login system not connected yet.";
+  }, 800);
+});
 </script>
 
 </body>
