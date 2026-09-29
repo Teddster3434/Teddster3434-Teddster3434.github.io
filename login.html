@@ -17,8 +17,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
+/* dark overlay */
 body::before {
   content: "";
   position: fixed;
@@ -27,28 +29,65 @@ body::before {
   z-index: 0;
 }
 
+/* scene for animation */
+#scene {
+  transition: transform 1.2s ease, filter 1.2s ease;
+}
+
+.zooming {
+  transform: scale(1.3);
+  filter: blur(3px);
+}
+
+/* login card */
 .container {
   position: relative;
   z-index: 10;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.45);
   padding: 40px 30px;
-  border-radius: 12px;
+  border-radius: 14px;
   width: 90%;
   max-width: 400px;
   text-align: center;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.15);
 }
 
+h1 {
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+
+.dynamic-message {
+  margin-bottom: 20px;
+  color: #c8a85d;
+  min-height: 40px;
+}
+
+/* inputs */
 input {
   width: 100%;
   padding: 12px;
-  margin-bottom: 15px;
   border-radius: 8px;
   border: 1px solid #444;
-  background: #0b0f18;
-  color: white;
+  background: #0b0f18 !important;
+  color: white !important;
+  margin-bottom: 15px;
 }
 
+/* kill autofill ugliness */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #0b0f18 inset !important;
+  -webkit-text-fill-color: white !important;
+}
+
+input:focus {
+  border-color: #c8a85d;
+  box-shadow: 0 0 10px rgba(200,168,93,0.4);
+  outline: none;
+}
+
+/* button */
 .btn {
   width: 100%;
   padding: 12px;
@@ -56,47 +95,93 @@ input {
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
 }
 
 .status {
-  margin-top: 10px;
+  margin-top: 12px;
+  min-height: 20px;
+  font-size: 14px;
+}
+
+/* hat animation */
+#hat {
+  position: fixed;
+  bottom: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  opacity: 0;
+  transition: all 1.2s ease;
+  z-index: 20;
+}
+
+.hat-rise {
+  bottom: 40%;
+  opacity: 1;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-  <h1>Login</h1>
+<div id="scene">
+  <div class="container">
+    <h1>LOGIN</h1>
+    <div class="dynamic-message" id="message"></div>
 
-  <form id="loginForm">
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button type="submit" class="btn">Login</button>
-  </form>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit" class="btn">Login</button>
+    </form>
 
-  <div class="status" id="status"></div>
+    <div class="status" id="status"></div>
+  </div>
 </div>
 
-<!-- ✅ Firebase v10 (MODERN WAY) -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+<!-- hat -->
+<img id="hat" src="Hat.png">
 
-/* 🔥 PUT YOUR CONFIG HERE */
+<!-- 🔥 Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+/* YOUR CONFIG (already correct) */
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBGkGnNraXonGNCMH0kQH0HcdgVQeDDqjI",
+  authDomain: "storm-center-5f5fd.firebaseapp.com",
+  projectId: "storm-center-5f5fd",
+  storageBucket: "storm-center-5f5fd.firebasestorage.app",
+  messagingSenderId: "371213361425",
+  appId: "1:371213361425:web:089e296a06e7aef929acb0"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-/* 🔐 LOGIN HANDLER */
+/* 🎭 messages */
+const messages = [
+  "Hat secured. Ball missing.",
+  "Storm’s coming… stay steady.",
+  "Find your way back.",
+  "You’re nearly there.",
+  "Hold the line."
+];
+
+document.getElementById("message").textContent =
+  messages[Math.floor(Math.random() * messages.length)];
+
+/* 🔐 LOGIN */
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault(); // 🔥 stops refresh
+  e.preventDefault();
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -107,11 +192,15 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
 
-    status.innerText = "Success! Redirecting...";
+    status.innerText = "Welcome back.";
+
+    // 🎬 animation trigger
+    document.getElementById("scene").classList.add("zooming");
+    document.getElementById("hat").classList.add("hat-rise");
 
     setTimeout(() => {
       window.location.href = "dashboard.html";
-    }, 800);
+    }, 1600);
 
   } catch (error) {
     status.innerText = error.message;
