@@ -8,14 +8,14 @@
 <style>
 :root {
   --gold: #c8a85d;
-  --bg: #0c0f14;
 }
 
+/* 🌑 BASE */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   color: white;
-  background: var(--bg);
+  overflow: hidden;
 }
 
 /* 🌩️ BACKGROUND */
@@ -30,11 +30,11 @@ body {
 .overlay {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at center, transparent, #0c0f14 85%);
+  background: radial-gradient(circle at center, transparent, #000 90%);
   z-index: -1;
 }
 
-/* 🔝 NAVBAR */
+/* 🔝 NAV */
 .nav {
   position: fixed;
   top: 0;
@@ -43,7 +43,7 @@ body {
   justify-content: center;
   gap: 12px;
   padding: 14px;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.35);
   backdrop-filter: blur(8px);
   z-index: 100;
 }
@@ -61,7 +61,7 @@ body {
   border-color: var(--gold);
 }
 
-/* 🎩 LOGIN ICON (NOT TEXT) */
+/* 🎩 LOGIN ICON */
 .login-btn {
   position: absolute;
   right: 16px;
@@ -78,14 +78,12 @@ body {
   background: rgba(0,0,0,0.3);
 }
 
-/* 🎯 HERO */
-.center {
+/* 🎯 MAIN CONTENT */
+#mainContent {
+  display: none;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  pointer-events: none;
   text-align: center;
 }
 
@@ -95,39 +93,86 @@ h1 {
 }
 
 .tagline {
-  margin-top: 10px;
   color: var(--gold);
+  margin-top: 10px;
 }
 
-/* ⚠️ WARNING SCREEN */
+/* 🎬 WARNING OVERLAY */
 #warning {
   position: fixed;
   inset: 0;
   display: none;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  z-index: 999;
+  background: radial-gradient(circle, rgba(0,0,0,0.5), #000);
+  backdrop-filter: blur(6px);
+}
+
+/* ⚡ WARNING BOX */
+.warning-box {
+  background: rgba(10,10,10,0.9);
+  border-radius: 16px;
+  padding: 40px 30px;
   text-align: center;
-  z-index: 90;
+  max-width: 420px;
+  width: 90%;
+  border: 1px solid rgba(200,168,93,0.4);
+
+  box-shadow:
+    0 0 30px rgba(200,168,93,0.3),
+    inset 0 0 20px rgba(200,168,93,0.1);
+
+  animation: fadeIn 0.8s ease;
 }
 
-.btn {
-  margin-top: 20px;
-  padding: 12px 24px;
-  background: var(--gold);
+/* 🤠 TITLE */
+#warningTitle {
+  font-size: 28px;
+  color: var(--gold);
+  margin-bottom: 10px;
+  animation: glow 2s infinite alternate;
+}
+
+/* TEXT */
+.warn-text {
+  opacity: 0.85;
+  margin-bottom: 20px;
+}
+
+/* 🔥 BUTTON */
+.enter-btn {
+  background: linear-gradient(135deg, #c8a85d, #a88a45);
   border: none;
+  padding: 12px 28px;
   border-radius: 10px;
+  font-weight: bold;
   cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 0 12px rgba(200,168,93,0.5);
 }
 
-/* 🎩 FLOATING LOGO */
-#hatLogo {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 80px;
-  opacity: 0.8;
-  filter: drop-shadow(0 0 12px rgba(200,168,93,0.3));
+.enter-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 25px rgba(200,168,93,0.8);
+}
+
+/* SMALL TEXT */
+.sub-note {
+  margin-top: 12px;
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+/* ✨ ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 5px rgba(200,168,93,0.2); }
+  to { text-shadow: 0 0 20px rgba(200,168,93,0.9); }
 }
 </style>
 </head>
@@ -145,61 +190,85 @@ h1 {
   <a href="links.html">Links</a>
   <a href="help.html">Help</a>
 
-  <!-- LOGIN ICON -->
   <a href="login.html" class="login-btn">
     <img src="login.png">
   </a>
 </div>
 
-<!-- HERO -->
-<div class="center">
-  <h1>L STORM</h1>
-  <div class="tagline">Not lost. Becoming.</div>
+<!-- 🎯 MAIN -->
+<div id="mainContent">
+  <div>
+    <h1>L STORM</h1>
+    <div class="tagline">Not lost. Becoming.</div>
+  </div>
 </div>
 
-<!-- WARNING -->
+<!-- 🎬 WARNING -->
 <div id="warning">
-  <h2 id="warningTitle"></h2>
-  <p>This site contains strong themes. Listener discretion advised.</p>
-  <button class="btn" id="continueBtn">Continue</button>
-</div>
+  <div class="warning-box">
 
-<img src="Hat.png" id="hatLogo">
+    <h2 id="warningTitle"></h2>
+
+    <div class="warn-text">
+      This site contains strong themes.<br>
+      Listener discretion advised.
+    </div>
+
+    <button class="enter-btn" id="continueBtn">
+      YEE HAW →
+    </button>
+
+    <div class="sub-note">
+      (you can always turn back later…)
+    </div>
+
+  </div>
+</div>
 
 <script>
-/* 🎭 RANDOM WARNING TITLES */
+const warning = document.getElementById("warning");
+const main = document.getElementById("mainContent");
+const btn = document.getElementById("continueBtn");
+
+/* 🎭 RANDOM TITLE */
 const titles = [
-  "Easy now, cowboy 🤠",
+  "Easy now, cowboy ⚡",
   "Storm ahead ⚡",
-  "Hold up a second, partner",
+  "Hold up, partner",
   "Before you step in…",
-  "The wind’s picking up…",
-  "Not so fast, cowboy"
+  "The wind’s picking up…"
 ];
 
 document.getElementById("warningTitle").textContent =
   titles[Math.floor(Math.random() * titles.length)];
 
-/* ⚠️ WARNING LOGIC */
-const warning = document.getElementById("warning");
-const btn = document.getElementById("continueBtn");
-
+/* 🎬 TRANSITION */
 function showMain(){
-  warning.style.display = "none";
+  warning.style.opacity = "0";
+
+  setTimeout(() => {
+    warning.style.display = "none";
+    main.style.display = "flex";
+    document.body.style.overflow = "auto";
+  }, 400);
 }
 
 function showWarning(){
   warning.style.display = "flex";
+  main.style.display = "none";
 }
 
+/* CLICK */
 btn.addEventListener("click", () => {
   localStorage.setItem("accepted", "yes");
   showMain();
 });
 
+/* LOAD */
 window.onload = () => {
   if(localStorage.getItem("accepted") === "yes"){
-    showMain();
+    main.style.display = "flex";
+    document.body.style.overflow = "auto";
   } else {
     showWarning();
   }
