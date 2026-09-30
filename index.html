@@ -4,192 +4,206 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>L Storm</title>
-<link rel="icon" type="image/png" href="favicon.png">
 
 <style>
-  html { scroll-behavior: smooth; }
+:root {
+  --gold: #c8a85d;
+  --bg: #0c0f14;
+}
 
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    color: white;
-    background: url("Hat.png") no-repeat center center fixed;
-    background-size: cover;
-  }
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: rgba(12, 15, 20, 0.85);
-    z-index: 0;
-  }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+  background: var(--bg);
+}
 
-  .topbar{
-    position: fixed; top:0; left:0; right:0;
-    z-index: 100;
-    display:flex; justify-content:center; gap:12px;
-    padding:14px 16px;
-    background: rgba(0,0,0,0.40);
-    backdrop-filter: blur(6px);
-  }
-  .topbar a{
-    color:white; text-decoration:none;
-    padding:10px 18px;
-    border:1px solid rgba(255,255,255,0.25);
-    border-radius:10px;
-    background: rgba(0,0,0,0.25);
-    font-size:15px;
-    transition: 0.2s ease;
-  }
-  .topbar a:hover{
-    border-color: rgba(255,255,255,0.6);
-    transform: translateY(-2px);
-  }
+/* 🌩️ BACKGROUND */
+.bg {
+  position: fixed;
+  inset: 0;
+  background: url("Hat.png") center/cover no-repeat;
+  filter: brightness(0.35);
+  z-index: -2;
+}
 
-  .login-btn{
-    position:absolute;
-    right:16px;
-    top:50%;
-    transform: translateY(-50%);
-  }
-  .login-btn img{
-    width:36px;
-    height:36px;
-    border-radius:8px;
-    border:1px solid rgba(255,255,255,0.25);
-    background: rgba(0,0,0,0.25);
-    padding:5px;
-    cursor:pointer;
-  }
-  .login-btn img:hover{
-    border-color: rgba(255,255,255,0.6);
-  }
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent, #0c0f14 85%);
+  z-index: -1;
+}
 
-  #warning{
-    position: fixed; inset:0;
-    display:none;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:20px;
-    z-index: 90;
-  }
-  #warning h2{ margin:0 0 10px; }
-  #warning p{ margin:0; line-height:1.5; opacity:0.95; }
+/* 🔝 NAVBAR */
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
 
-  .btn{
-    background:#c8a85d;
-    border:none;
-    padding:12px 24px;
-    margin-top:16px;
-    font-size:16px;
-    cursor:pointer;
-    border-radius:10px;
-  }
-  .btn:hover{ filter: brightness(1.1); }
+.nav a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 16px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  font-size: 14px;
+}
 
-  #mainContent{
-    display:none;
-    position: relative;
-    z-index: 2;
-    max-width: 900px;
-    margin: 0 auto;
-    text-align:center;
-    padding: 150px 20px 80px;
-  }
+.nav a:hover {
+  border-color: var(--gold);
+}
 
-  h1{ margin:0; font-size:56px; letter-spacing:4px; }
-  .tagline{ margin-top:10px; color:#c8a85d; }
+/* 🎩 LOGIN ICON (NOT TEXT) */
+.login-btn {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
-  .card{
-    margin: 40px auto 0;
-    max-width: 760px;
-    text-align:left;
-    background: rgba(0,0,0,0.35);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 16px;
-    padding: 20px;
-    line-height: 1.7;
-  }
+.login-btn img {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 4px;
+  background: rgba(0,0,0,0.3);
+}
 
-  .links-row{
-    text-align:center;
-    margin-top: 16px;
-  }
-  .links-row a{
-    display:inline-block;
-    margin: 10px 8px 0;
-    color:white;
-    text-decoration:none;
-    padding:10px 16px;
-    border:1px solid rgba(255,255,255,0.22);
-    border-radius:10px;
-    background: rgba(0,0,0,0.25);
-  }
-  .links-row a:hover{ border-color: rgba(255,255,255,0.45); }
+/* 🎯 HERO */
+.center {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  text-align: center;
+}
+
+h1 {
+  font-size: 64px;
+  letter-spacing: 6px;
+}
+
+.tagline {
+  margin-top: 10px;
+  color: var(--gold);
+}
+
+/* ⚠️ WARNING SCREEN */
+#warning {
+  position: fixed;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  z-index: 90;
+}
+
+.btn {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: var(--gold);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* 🎩 FLOATING LOGO */
+#hatLogo {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 80px;
+  opacity: 0.8;
+  filter: drop-shadow(0 0 12px rgba(200,168,93,0.3));
+}
 </style>
 </head>
 
 <body>
 
-<div class="topbar">
+<div class="bg"></div>
+<div class="overlay"></div>
+
+<!-- NAV -->
+<div class="nav">
   <a href="index.html">Home</a>
   <a href="about.html">About</a>
   <a href="story.html">Story</a>
-  <a href="help.html">Help</a>
   <a href="links.html">Links</a>
+  <a href="help.html">Help</a>
 
+  <!-- LOGIN ICON -->
   <a href="login.html" class="login-btn">
-    <img src="login.png" alt="Login">
+    <img src="login.png">
   </a>
 </div>
 
-<div id="warning">
-  <h2>Woah there, cowboy 🤠</h2>
-  <p>This site contains strong language. Listener discretion advised.</p>
-  <button class="btn" id="continueBtn" type="button">Continue</button>
-</div>
-
-<div id="mainContent">
+<!-- HERO -->
+<div class="center">
   <h1>L STORM</h1>
-  <div class="tagline">One Step Down</div>
-
-  <div class="card">
-    <strong>What this is:</strong><br>
-    Emotional alternative music about staying, reaching out, and choosing tomorrow.
-    If you’re struggling, you’re not alone.
-    <div class="links-row">
-      <a href="links.html">My links</a>
-      <a href="help.html">Get support</a>
-    </div>
-  </div>
+  <div class="tagline">Not lost. Becoming.</div>
 </div>
+
+<!-- WARNING -->
+<div id="warning">
+  <h2 id="warningTitle"></h2>
+  <p>This site contains strong themes. Listener discretion advised.</p>
+  <button class="btn" id="continueBtn">Continue</button>
+</div>
+
+<img src="Hat.png" id="hatLogo">
 
 <script>
-  const warning = document.getElementById("warning");
-  const main = document.getElementById("mainContent");
-  const btn = document.getElementById("continueBtn");
+/* 🎭 RANDOM WARNING TITLES */
+const titles = [
+  "Easy now, cowboy 🤠",
+  "Storm ahead ⚡",
+  "Hold up a second, partner",
+  "Before you step in…",
+  "The wind’s picking up…",
+  "Not so fast, cowboy"
+];
 
-  function showMain(){
-    warning.style.display = "none";
-    main.style.display = "block";
-  }
-  function showWarning(){
-    warning.style.display = "flex";
-    main.style.display = "none";
-  }
+document.getElementById("warningTitle").textContent =
+  titles[Math.floor(Math.random() * titles.length)];
 
-  btn.addEventListener("click", () => {
-    localStorage.setItem("lstormAccepted", "yes");
+/* ⚠️ WARNING LOGIC */
+const warning = document.getElementById("warning");
+const btn = document.getElementById("continueBtn");
+
+function showMain(){
+  warning.style.display = "none";
+}
+
+function showWarning(){
+  warning.style.display = "flex";
+}
+
+btn.addEventListener("click", () => {
+  localStorage.setItem("accepted", "yes");
+  showMain();
+});
+
+window.onload = () => {
+  if(localStorage.getItem("accepted") === "yes"){
     showMain();
-  });
-
-  window.addEventListener("load", () => {
-    const accepted = localStorage.getItem("lstormAccepted");
-    if (accepted === "yes") showMain();
-    else showWarning();
-  });
+  } else {
+    showWarning();
+  }
+};
 </script>
 
 </body>
