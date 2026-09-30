@@ -2,245 +2,263 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Storm Center Dashboard</title>
+<title>L Storm Dashboard</title>
 
 <style>
 body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #0a0f1c;
-    color: white;
-    display: flex;
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#0b1220;
+  color:white;
+  overflow:hidden;
+}
+
+/* LAYOUT */
+.app {
+  display:flex;
+  height:100vh;
 }
 
 /* SIDEBAR */
 .sidebar {
-    width: 250px;
-    height: 100vh;
-    background: #02050a;
-    border-right: 1px solid #d4a63a;
-    position: fixed;
-    left: 0;
-    top: 0;
-    padding-top: 20px;
-    transition: transform 0.3s ease;
-}
-
-.sidebar.hidden {
-    transform: translateX(-100%);
+  width:240px;
+  background:rgba(0,0,0,0.85);
+  border-right:1px solid rgba(200,168,93,0.3);
+  padding:20px;
 }
 
 .sidebar h2 {
-    text-align: center;
-    margin-bottom: 30px;
+  color:#c8a85d;
+  margin-bottom:30px;
 }
 
-/* GOLD SLIDER */
-.slider {
-    position: absolute;
-    width: 4px;
-    height: 50px;
-    background: #d4a63a;
-    left: 0;
-    top: 80px;
-    transition: top 0.3s ease;
-}
-
-/* BUTTONS */
 .nav-btn {
-    width: 100%;
-    padding: 15px;
-    background: none;
-    border: none;
-    color: white;
-    text-align: left;
-    cursor: pointer;
-    font-size: 15px;
+  display:block;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.3s;
 }
 
 .nav-btn:hover {
-    background: rgba(212,166,58,0.2);
+  background:rgba(200,168,93,0.2);
 }
 
 /* MAIN */
 .main {
-    margin-left: 250px;
-    padding: 30px;
-    width: 100%;
-    transition: margin-left 0.3s ease;
+  flex:1;
+  padding:30px;
+  overflow-y:auto;
 }
 
-.main.full {
-    margin-left: 0;
-}
-
-/* TOP BAR */
-.topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.left {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.menu-btn {
-    font-size: 24px;
-    cursor: pointer;
-}
-
-/* LOGOUT */
-.logout {
-    background: #d4a63a;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: bold;
-}
-
-/* SECTIONS */
-.section {
-    display: none;
-    margin-top: 30px;
-}
-
-.section.active {
-    display: block;
-}
-
+/* CARD */
 .card {
-    background: #111827;
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid #d4a63a;
+  background:rgba(0,0,0,0.5);
+  border:1px solid rgba(200,168,93,0.3);
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:20px;
+  animation:fadeIn 0.4s ease;
+}
+
+/* INPUT */
+input {
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:8px;
+  border:1px solid #333;
+  background:#0b0f18;
+  color:white;
+}
+
+/* BUTTON */
+button {
+  margin-top:15px;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:#c8a85d;
+  cursor:pointer;
+}
+
+button:hover {
+  filter:brightness(1.1);
+}
+
+/* HIDDEN */
+.hidden { display:none; }
+
+/* SETUP SCREEN */
+.setup {
+  position:fixed;
+  inset:0;
+  background:#0b1220;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.setup-box {
+  background:#111a2e;
+  padding:30px;
+  border-radius:12px;
+  width:320px;
+  text-align:center;
+  border:1px solid #c8a85d;
+}
+
+@keyframes fadeIn {
+  from {opacity:0; transform:translateY(10px);}
+  to {opacity:1; transform:translateY(0);}
 }
 </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar" id="sidebar">
-    <div class="slider" id="slider"></div>
+<!-- SETUP SCREEN -->
+<div id="setupScreen" class="setup hidden">
+  <div class="setup-box">
+    <h2>First Setup ⚡</h2>
+    <p>Tell us who you are</p>
 
-    <h2>Storm</h2>
+    <input id="setupName" placeholder="Display name">
 
-    <button class="nav-btn" onclick="showSection('home', this)">🏠 Home</button>
-    <button class="nav-btn" onclick="showSection('account', this)">👤 Account</button>
-    <button class="nav-btn" onclick="showSection('security', this)">🔐 Security Centre</button>
-    <button class="nav-btn" onclick="showSection('info', this)">📄 My Information</button>
+    <button onclick="saveName()">Continue</button>
+  </div>
 </div>
 
-<!-- MAIN -->
-<div class="main" id="main">
+<!-- MAIN APP -->
+<div id="app" class="app hidden">
 
-<div class="topbar">
-    <div class="left">
-        <span class="menu-btn" onclick="toggleMenu()">☰</span>
-        <h1 id="welcome">Welcome</h1>
+  <div class="sidebar">
+    <h2>L STORM</h2>
+
+    <div class="nav-btn" onclick="showPage('home')">Home</div>
+    <div class="nav-btn" onclick="showPage('account')">Account</div>
+    <div class="nav-btn" onclick="showPage('settings')">Settings</div>
+    <div class="nav-btn" onclick="logout()">Logout</div>
+  </div>
+
+  <div class="main">
+
+    <!-- HOME -->
+    <div id="home" class="card">
+      <h2 id="welcome"></h2>
+      <p>Storm system active ⚡</p>
     </div>
 
-    <button class="logout" onclick="logout()">Logout</button>
-</div>
-
-<!-- HOME -->
-<div id="home" class="section active">
-    <div class="card">
-        <h2>Dashboard</h2>
-        <p id="helloText">Loading...</p>
+    <!-- ACCOUNT -->
+    <div id="account" class="card hidden">
+      <h2>Account</h2>
+      <p id="userEmail"></p>
+      <p id="userName"></p>
     </div>
-</div>
 
-<!-- ACCOUNT -->
-<div id="account" class="section">
-    <div class="card">
-        <h2>Account</h2>
-        <p>Email: <span id="userEmail"></span></p>
+    <!-- SETTINGS -->
+    <div id="settings" class="card hidden">
+      <h2>Edit Profile</h2>
+
+      <input id="newName" placeholder="New display name">
+      <button onclick="updateName()">Save Changes</button>
+
+      <button onclick="resetPassword()">Reset Password</button>
     </div>
+
+  </div>
 </div>
 
-<!-- SECURITY -->
-<div id="security" class="section">
-    <div class="card">
-        <h2>Security Centre</h2>
-        <p>2FA options coming soon.</p>
-    </div>
-</div>
-
-<!-- INFO -->
-<div id="info" class="section">
-    <div class="card">
-        <h2>My Information</h2>
-        <p>Name: <span id="userName"></span></p>
-    </div>
-</div>
-
-</div>
-
+<!-- FIREBASE -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+  updateProfile,
+  sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+/* YOUR CONFIG */
 const firebaseConfig = {
   apiKey: "AIzaSyBGkGnNraXonGNCMH0kQH0HcdgVQeDDqjI",
   authDomain: "storm-center-5f5fd.firebaseapp.com",
   projectId: "storm-center-5f5fd",
-  storageBucket: "storm-center-5f5fd.firebasestorage.app",
+  storageBucket: "storm-center-5f5fd.appspot.com",
   messagingSenderId: "371213361425",
   appId: "1:371213361425:web:089e296a06e7aef929acb0"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
-// AUTH CHECK
-onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-        window.location.href = "login.html";
-        return;
-    }
+/* AUTH STATE */
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
 
-    document.getElementById("userEmail").innerText = user.email;
+  document.getElementById("app").classList.remove("hidden");
 
-    const docRef = doc(db, "users", user.uid);
-    const docSnap = await getDoc(docRef);
+  userEmail.innerText = "Email: " + user.email;
+  userName.innerText = "Name: " + (user.displayName || "Not set");
 
-    if (docSnap.exists()) {
-        const data = docSnap.data();
+  if (!user.displayName) {
+    document.getElementById("setupScreen").classList.remove("hidden");
+  }
 
-        document.getElementById("userName").innerText = data.name;
-        document.getElementById("welcome").innerText = "Hello, " + data.name;
-        document.getElementById("helloText").innerText = "What's up " + data.name + "? ⚡";
-    }
+  welcome.innerText = "Welcome, " + (user.displayName || "Rider") + " ⚡";
 });
 
-// LOGOUT
-window.logout = function() {
-    signOut(auth).then(() => {
-        window.location.href = "login.html";
-    });
+/* NAVIGATION */
+window.showPage = (id) => {
+  ["home","account","settings"].forEach(x =>
+    document.getElementById(x).classList.add("hidden")
+  );
+  document.getElementById(id).classList.remove("hidden");
 };
 
-// MENU TOGGLE
-window.toggleMenu = function() {
-    document.getElementById("sidebar").classList.toggle("hidden");
-    document.getElementById("main").classList.toggle("full");
+/* SAVE NAME (SETUP) */
+window.saveName = async () => {
+  const name = document.getElementById("setupName").value;
+
+  if (!name) return alert("Enter a name");
+
+  await updateProfile(auth.currentUser, {
+    displayName: name
+  });
+
+  location.reload();
 };
 
-// SECTION SWITCH + SLIDER
-window.showSection = function(id, el) {
-    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
+/* UPDATE NAME */
+window.updateName = async () => {
+  const name = document.getElementById("newName").value;
 
-    const slider = document.getElementById("slider");
-    slider.style.top = el.offsetTop + "px";
+  await updateProfile(auth.currentUser, {
+    displayName: name
+  });
+
+  alert("Updated ⚡");
+  location.reload();
+};
+
+/* RESET PASSWORD */
+window.resetPassword = async () => {
+  const email = auth.currentUser.email;
+
+  await sendPasswordResetEmail(auth, email);
+  alert("Reset email sent ⚡");
+};
+
+/* LOGOUT */
+window.logout = () => {
+  signOut(auth).then(() => {
+    window.location.href = "login.html";
+  });
 };
 </script>
 
