@@ -1,136 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About - L Storm</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About - L Storm</title>
 
-  <!-- Favicon (tab icon) -->
-  <link rel="icon" type="image/png" href="favicon.png">
+<style>
+:root {
+  --gold: #c8a85d;
+  --bg: #0c0f14;
+}
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      color: white;
-      background: url("Hat.png") no-repeat center center fixed;
-      background-size: cover;
-    }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+  background: var(--bg);
+}
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: rgba(12, 15, 20, 0.82);
-      z-index: 0;
-    }
+/* 🌩️ BACKGROUND */
+.bg {
+  position: fixed;
+  inset: 0;
+  background: url("Hat.png") center/cover no-repeat;
+  filter: brightness(0.35);
+  z-index: -2;
+}
 
-    .topbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 10;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      padding: 14px 16px;
-      background: rgba(0,0,0,0.35);
-      backdrop-filter: blur(6px);
-    }
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent, #0c0f14 85%);
+  z-index: -1;
+}
 
-    .topbar a {
-      color: white;
-      text-decoration: none;
-      padding: 10px 18px;
-      border: 1px solid rgba(255,255,255,0.30);
-      border-radius: 10px;
-      background: rgba(0,0,0,0.20);
-      font-size: 15px;
-    }
+/* 🔝 NAVBAR (FIXED + MATCHES INDEX) */
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
 
-    .topbar a:hover {
-      border-color: rgba(255,255,255,0.60);
-    }
+.nav a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 16px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  font-size: 14px;
+}
 
-    .content {
-      position: relative;
-      z-index: 2;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 140px 18px 80px;
-    }
+.nav a:hover {
+  border-color: var(--gold);
+}
 
-    h1 {
-      text-align: center;
-      letter-spacing: 3px;
-      font-size: 44px;
-      margin: 0 0 20px;
-    }
+/* 🎩 LOGIN ICON */
+.login-btn {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
-    .card {
-      background: rgba(0,0,0,0.32);
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: 16px;
-      padding: 22px;
-      line-height: 1.7;
-      font-size: 17px;
-    }
+.login-btn img {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 4px;
+  background: rgba(0,0,0,0.3);
+}
 
-    .bridge {
-      font-style: italic;
-      text-align: center;
-      margin: 22px 0;
-      opacity: 0.95;
-    }
-  </style>
+/* 📄 CONTENT */
+.container {
+  max-width: 900px;
+  margin: 120px auto 40px;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 25px;
+  text-align: left;
+  line-height: 1.7;
+}
+
+.card em {
+  display: block;
+  text-align: center;
+  margin: 20px 0;
+  color: var(--gold);
+}
+
+/* 🎩 FLOATING LOGO */
+#hatLogo {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 80px;
+  opacity: 0.8;
+  filter: drop-shadow(0 0 12px rgba(200,168,93,0.3));
+}
+</style>
 </head>
 
 <body>
 
-  <div class="topbar">
-    <a href="index.html">Home</a>
-    <a href="about.html">About Me</a>
+<div class="bg"></div>
+<div class="overlay"></div>
+
+<!-- 🔝 NAV -->
+<div class="nav">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="story.html">Story</a>
+  <a href="links.html">Links</a>
+  <a href="help.html">Help</a>
+
+  <!-- 🎩 LOGIN ICON -->
+  <a href="login.html" class="login-btn">
+    <img src="login.png" alt="Login">
+  </a>
+</div>
+
+<!-- 📄 CONTENT -->
+<div class="container">
+  <h1>About L Storm</h1>
+
+  <div class="card">
+    L Storm was built from heavy nights and hard lessons. There was a time when everything felt louder in my head than it did in real life. I didn’t always handle it well. I tried to ignore it. I tried to numb it. But avoiding it never fixed it.<br><br>
+
+    The turning point wasn’t dramatic. It was small and quiet — choosing to step back instead of stepping further. Choosing to speak up instead of staying silent. Choosing to reach out instead of pretending I was fine.
+
+    <em>Not the fall — the step back.</em>
+
+    Recovery isn’t easy, and it doesn’t happen overnight. It takes time. It takes patience. It takes honesty. It’s learning new habits, having uncomfortable conversations, and sometimes slipping back — then choosing to keep going anyway.<br><br>
+
+    But it is possible.<br><br>
+
+    My goal with this music is simple: make the dark feel less lonely and encourage people to get help if they need it. If you’re struggling, reach out to someone you trust. You’re not weak for needing help. You deserve tomorrow.<br><br>
+
+    <strong>One Step Down is the beginning.</strong>
   </div>
+</div>
 
-  <div class="content">
-    <h1>About L Storm</h1>
-
-    <div class="card">
-      <p>
-        L Storm was built from heavy nights and hard lessons. There was a time when
-        everything felt louder in my head than it did in real life. I didn’t always
-        handle it well. I tried to ignore it. I tried to numb it. But avoiding it
-        never fixed it.
-      </p>
-
-      <p>
-        The turning point wasn’t dramatic. It was small and quiet — choosing to step
-        back instead of stepping further. Choosing to speak up instead of staying
-        silent. Choosing to reach out instead of pretending I was fine.
-      </p>
-
-      <div class="bridge">Not the fall — the step back.</div>
-
-      <p>
-        Recovery isn’t easy, and it doesn’t happen overnight. It takes time. It takes
-        patience. It takes honesty. It’s learning new habits, having uncomfortable
-        conversations, and sometimes slipping back — then choosing to keep going anyway.
-      </p>
-
-      <p>
-        But it is possible.
-      </p>
-
-      <p>
-        My goal with this music is simple: make the dark feel less lonely and encourage
-        people to get help if they need it. If you’re struggling, reach out to someone
-        you trust. You’re not weak for needing help. You deserve tomorrow.
-      </p>
-
-      <p><strong>One Step Down</strong> is the beginning.</p>
-    </div>
-  </div>
+<img src="Hat.png" id="hatLogo">
 
 </body>
 </html>
